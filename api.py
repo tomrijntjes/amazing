@@ -27,7 +27,7 @@ class SniffThread(threading.Thread):
                 parts = header[9:].split('//', 1)
                 referer = parts[0]+'//'+parts[1].split('/', 1)[0]
             if host and referer:
-                self.q.put(host,referer)
+                self.q.put((host,referer))
        
     def run(self):
         try:
@@ -51,14 +51,16 @@ class AmazingApi(appie.AppieRestObject):
         self.count += 1
         d = dict()
         while not q.empty():
-            host,referer  = q.get()
+            host,referer = q.get()
             if referer in d:
                 if host in d[referer]:
                      d[referer][host] +=1
                 else:
+                     d[referer] = {}
                      d[referer][host] = 1
             else:
-                d[referer][host] = 1
+                 d[referer] = {}
+                 d[referer][host] = 1
         q.task_done()
         return webob.Response(json.dumps(d), content_type="application/json")
 
