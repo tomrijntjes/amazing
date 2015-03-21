@@ -42,11 +42,25 @@
 			
 			game.load.image('background', 'logos/background.png');
 			game.load.image('google', 'logos/google.png');
+			game.load.image('marktplaats', 'logos/marktplaats.png');
         }
 
         function create () {
         	
+        	game.physics.startSystem(Phaser.Physics.ARCADE);
+        	
         	game.add.image(0, 0, 'background');
+        	
+        	// maak sprites
+        	marktplaats = game.add.sprite(game.world.centerX, game.world.centerY, 'marktplaats');
+        	
+        	// enable de physics op de sprites        
+        	game.physics.enable( [ marktplaats ], Phaser.Physics.ARCADE);        
+    		
+    		// apply gravity per sprite
+        	marktplaats.body.gravity.y = 100;
+        	marktplaats.body.bounce.y = 0.5;
+        	marktplaats.body.collideWorldBounds = true;
         	
         	// Good or Bad = Up or Down
         	var up = -100;
@@ -63,12 +77,12 @@
                                     
             for (i = 0; i < Object.keys(obj.getRequests).length; i++) { 
     			if (obj.getRequests[i].label == "BAD") {
-    				emitter.angularDrag = 30;
+    				emitter.angularDrag = -30;
     				emitter.gravity = down;
     				emitter.makeParticles('google', 0, 1, true, true);
     				emitter.start(false, 0, 1000);	
     			} else if (obj.getRequests[i].label == "OK") {
-    				emitter2.angularDrag = -30;
+    				emitter2.angularDrag = 30;
     				emitter2.gravity = up;
     				emitter2.makeParticles('google', 0, 1, true, true);
     				emitter2.start(false, 0, 1000);
@@ -84,6 +98,8 @@
 
     		game.physics.arcade.collide(emitter);
     		game.physics.arcade.collide(emitter2);
+    		
+    		game.physics.arcade.collide(marktplaats, emitter);
 	
 		}
         
