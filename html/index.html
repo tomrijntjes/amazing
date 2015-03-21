@@ -39,13 +39,14 @@
         	var down = 100;
         	
             
-            emitter = game.add.emitter(game.world.centerX, game.world.centerY, 5000);
+            emitter = game.add.emitter(game.world.centerX, game.world.centerY, 0);
             emitter.makeParticles('google', 0, 10, true, true);
             
+            emitter.lifespan = 0;
             emitter.gravity = up;
             emitter.bounce.setTo(0.5, 0.5);
             emitter.angularDrag = 30;
-            emitter.start(false, 8000, 400);
+            emitter.start(false, 0, 1000);
             
         }
         
