@@ -8,22 +8,36 @@ from threading import Thread
 stars = lambda n: "*" * n
 q = Queue()
 
+def GET_print(packet):
+    q.put(packet)
+    pkt =  "\n".join((
+        stars(40) + "GET PACKET" + stars(40),
+        "\n".join(packet.sprintf("{Raw:%Raw.load%}").split(r"\r\n")),
+        stars(90)))
+
+print("sniffing...")
 
 def worker():
     while True:
         pkt = q.get()
-        #do something
+        print http._parse_headers(pkt)
+	
         q.task_done()
+
+def expand(x):
+    yield x
+    while x.payload:
+        x = x.payload
+        yield x
 
         
 def main():
     t = Thread(target=worker)
     t.daemon = True
     t.start()
-    print("sniffing...")
     sniff(
         iface='eth0',
-        prn=q.put(packet),
+        prn=GET_print,
         lfilter=lambda p: "GET" in str(p),
         filter="tcp port 80")
     q.join()

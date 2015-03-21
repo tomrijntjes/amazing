@@ -9,6 +9,7 @@ def GET_print(packet):
         "\n".join(packet.sprintf("{Raw:%Raw.load%}").split(r"\r\n")),
         stars(90)))
 
+print("sniffing...")
 sniff(
     iface='eth0',
     prn=GET_print,
