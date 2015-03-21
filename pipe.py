@@ -20,13 +20,14 @@ def packethandler(pkt):
 	    parts = header[9:].split('//', 1)
 	    referer = parts[0]+'//'+parts[1].split('/', 1)[0]
 	    #print "Referer: " + referer
-    if referer and referer in last_referer:
+    if referer == last_referer:
 	if host in hostdict:
 	    hostdict[host] += 1
 	else:
 	    hostdict[host] = 1
-    if referer and referer not in last_referer:
-	q.append({"referer":last_referer,"hosts":hostdict})
+    else:
+	print({"referer":last_referer,"hosts":hostdict})
+	hostdict = {}
 	last_referer = referer
         
 def main():
