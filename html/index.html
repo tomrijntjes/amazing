@@ -9,41 +9,40 @@
 
     <script type="text/javascript">
 
-    window.onload = function() {
-
-        var game = new Phaser.Game(1000, 600, Phaser.AUTO, '', { preload: preload, create: create });
+        var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'test-test', { preload: preload, create: create, update: update });
         
         var emitter;
 
         function preload () {
 			
 			game.load.image('google', 'logos/google.png');
-            game.load.image('logo', 'phaser.png');
         }
 
         function create () {
             
             emitter = game.add.emitter(game.world.centerX, game.world.centerY, 250);
-            emitter.makeParticles('google', 1, 3, true, true);
+            emitter.makeParticles('google', 0, 3, true, true);
             
+            emitter.minParticleSpeed.setTo(-200, -300);
+    		emitter.maxParticleSpeed.setTo(200, -400);
             emitter.gravity = 150;
             emitter.bounce.setTo(0.5, 0.5);
+            emitter.angularDrag = 30;
             emitter.start(false, 8000, 400);
             
-            logo.anchor.setTo(0.5, 0.5);
         }
+        
+        function update () {
+
+    		game.physics.arcade.collide(emitter);
+	
+		}
+        
         function dataq() {
             console.log('boe');
         }
-        setInterval(dataq, 1000);
-    }
-    
-    function update() {
-
-    game.physics.arcade.collide(emitter);
-
-}
-    ;
+        
+		setInterval(dataq, 1000);
 
     </script>
 
