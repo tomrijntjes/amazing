@@ -12,16 +12,30 @@
         var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'test-test', { preload: preload, create: create, update: update });
         
         var emitter;
+        var emitter2;
         
        	// JSON
        	var text = '{"getRequests":[' +
     '{"src":"John", "dst":"www.marktplaats.nl", "label":"OK", "count":"1" },' +
-    '{"src":"John", "dst":"www.google.nl", "label":"OK", "count":"1" }' + 
+    '{"src":"John", "dst":"analytics.google.nl", "label":"OK", "count":"1" },' +
+    '{"src":"John", "dst":"www.youtube.nl", "label":"OK", "count":"1" },' +
+    '{"src":"John", "dst":"www.facebook.nl", "label":"OK", "count":"1" },' +
+    '{"src":"John", "dst":"www.datacollection.ru", "label":"OK", "count":"1" },' +
+    '{"src":"John", "dst":"www.bam.nl", "label":"OK", "count":"1" },' +
+    '{"src":"John", "dst":"www.catapi.com", "label":"OK", "count":"1" },' +
+    '{"src":"John", "dst":"www.9gag.com", "label":"OK", "count":"1" },' +
+    '{"src":"John", "dst":"www.twitter.nl", "label":"BAD", "count":"1" },' +
+    '{"src":"John", "dst":"www.buienradart.nl", "label":"BAD", "count":"1" }' + 
 ']}';
 		var obj = JSON.parse(text);
 		
 		// testing
 		console.log(obj.getRequests[1].dst);
+		console.log(Object.keys(obj.getRequests).length);
+		
+		
+		var bubbleAmount = Object.keys(obj.getRequests).length;
+		
 		
 		
         function preload () {
@@ -38,21 +52,38 @@
         	var up = -100;
         	var down = 100;
         	
-            
             emitter = game.add.emitter(game.world.centerX, game.world.centerY, 0);
-            emitter.makeParticles('google', 0, 10, true, true);
+            emitter2 = game.add.emitter(game.world.centerX, game.world.centerY, 0);
+            
+            //emitter.makeParticles('google', 0, bubbleAmount, true, true);
             
             emitter.lifespan = 0;
-            emitter.gravity = up;
             emitter.bounce.setTo(0.5, 0.5);
-            emitter.angularDrag = 30;
-            emitter.start(false, 0, 1000);
             
+                                    
+            for (i = 0; i < Object.keys(obj.getRequests).length; i++) { 
+    			if (obj.getRequests[i].label == "BAD") {
+    				emitter.angularDrag = 30;
+    				emitter.gravity = down;
+    				emitter.makeParticles('google', 0, 1, true, true);
+    				emitter.start(false, 0, 1000);	
+    			} else if (obj.getRequests[i].label == "OK") {
+    				emitter2.angularDrag = -30;
+    				emitter2.gravity = up;
+    				emitter2.makeParticles('google', 0, 1, true, true);
+    				emitter2.start(false, 0, 1000);
+    				console.log('OK');
+    			}
+    			
+    			console.log(i);
+			}  
+			
         }
         
         function update () {
 
     		game.physics.arcade.collide(emitter);
+    		game.physics.arcade.collide(emitter2);
 	
 		}
         
