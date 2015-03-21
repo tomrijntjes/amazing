@@ -25,13 +25,24 @@
             emitter = game.add.emitter(game.world.centerX, game.world.centerY, 250);
             emitter.makeParticles('google');
             
+            emitter.gravity = 150;
+            emitter.bounce.setTo(0.5, 0.5);
+            emitter.start(false, 8000, 400);
+            
             logo.anchor.setTo(0.5, 0.5);
         }
         function dataq() {
             console.log('boe');
         }
         setInterval(dataq, 1000);
-    };
+    }
+    
+    function update() {
+
+    game.physics.arcade.collide(emitter);
+
+}
+    ;
 
     </script>
 
