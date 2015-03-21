@@ -21,6 +21,10 @@
 
         function create () {
             var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'google');
+            
+            emitter = game.add.emitter(game.world.centerX, game.world.centerY, 250);
+            emitter.makeParticles('google');
+            
             logo.anchor.setTo(0.5, 0.5);
         }
         function dataq() {
