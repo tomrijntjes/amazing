@@ -12,6 +12,8 @@
     window.onload = function() {
 
         var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create });
+        
+        var emitter;
 
         function preload () {
 			
@@ -23,7 +25,7 @@
             var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'google');
             
             emitter = game.add.emitter(game.world.centerX, game.world.centerY, 250);
-            emitter.makeParticles('google');
+            emitter.makeParticles('google', 0, 3, true, true);
             
             emitter.gravity = 150;
             emitter.bounce.setTo(0.5, 0.5);
