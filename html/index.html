@@ -12,20 +12,34 @@
         var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'test-test', { preload: preload, create: create, update: update });
         
         var emitter;
-
+        
+       	// JSON
+       	var text = '{"getRequests":[' +
+    '{"src":"John", "dst":"www.marktplaats.nl", "label":"OK", "count":"1" },' +
+    '{"src":"John", "dst":"www.google.nl", "label":"OK", "count":"1" }' + 
+']}';
+		var obj = JSON.parse(text);
+		
+		// testing
+		console.log(obj.getRequests[1].dst);
+		
+		
         function preload () {
 			
+			game.load.image('background', 'logos/background.png');
 			game.load.image('google', 'logos/google.png');
         }
 
         function create () {
         	
+        	game.add.image(0, 0, 'background');
+        	
         	// Good or Bad = Up or Down
-        	var up = -150;
-        	var down = 150;
+        	var up = -100;
+        	var down = 100;
         	
             
-            emitter = game.add.emitter(game.world.centerX, game.world.centerY, 250);
+            emitter = game.add.emitter(game.world.centerX, game.world.centerY, 5000);
             emitter.makeParticles('google', 0, 10, true, true);
             
             emitter.gravity = up;
