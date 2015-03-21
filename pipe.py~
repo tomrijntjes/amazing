@@ -2,45 +2,40 @@
 from scapy.all import *
 from scapy.layers import http
 
-from Queue import Queue
-from threading import Thread
-
 stars = lambda n: "*" * n
-q = Queue()
 
-def GET_print(packet):
-    q.put(packet)
-    pkt =  "\n".join((
-        stars(40) + "GET PACKET" + stars(40),
-        "\n".join(packet.sprintf("{Raw:%Raw.load%}").split(r"\r\n")),
-        stars(90)))
+q = list()
+hostdict = {}
+last_referer = "empty string that is not none"
 
-print("sniffing...")
-
-def worker():
-    while True:
-        pkt = q.get()
-        print http._parse_headers(pkt)
-	
-        q.task_done()
-
-def expand(x):
-    yield x
-    while x.payload:
-        x = x.payload
-        yield x
-
+def packethandler(pkt):
+    global hostdict
+    global last_referer
+    host,referer = None,None
+    for header in str(pkt).splitlines():
+	if "Host" in header:
+	    host = header[6:]
+ 	    #print "Host: " + host
+	if "Referer"  in header:
+	    parts = header[9:].split('//', 1)
+	    referer = parts[0]+'//'+parts[1].split('/', 1)[0]
+	    #print "Referer: " + referer
+    if referer and referer in last_referer:
+	if host in hostdict:
+	    hostdict[host] += 1
+	else:
+	    hostdict[host] = 1
+    if referer and referer not in last_referer:
+	q.append({"referer":last_referer,"hosts":hostdict})
+	last_referer = referer
         
 def main():
-    t = Thread(target=worker)
-    t.daemon = True
-    t.start()
+    print("sniffing...")
     sniff(
         iface='eth0',
-        prn=GET_print,
+        prn= packethandler,
         lfilter=lambda p: "GET" in str(p),
         filter="tcp port 80")
-    q.join()
 
 
 main()
