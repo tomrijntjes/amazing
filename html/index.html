@@ -59,14 +59,16 @@
             
             emitter.lifespan = 0;
             emitter.bounce.setTo(0.5, 0.5);
-            emitter.angularDrag = 30;
+            
                                     
             for (i = 0; i < Object.keys(obj.getRequests).length; i++) { 
     			if (obj.getRequests[i].label == "BAD") {
+    				emitter.angularDrag = 30;
     				emitter.gravity = down;
     				emitter.makeParticles('google', 0, 1, true, true);
     				emitter.start(false, 0, 1000);	
     			} else if (obj.getRequests[i].label == "OK") {
+    				emitter2.angularDrag = -30;
     				emitter2.gravity = up;
     				emitter2.makeParticles('google', 0, 1, true, true);
     				emitter2.start(false, 0, 1000);
