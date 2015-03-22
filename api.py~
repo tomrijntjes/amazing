@@ -14,6 +14,7 @@ classifier = {"rtd.tubemogul.com":0.6,
 "pagead2.googlesyndication.com":0.9,
 "nos.nl":0.05,
 "cm.g.doubleclick.net":0.5,
+"ad.doubleclick.net:":0.6
 "tracking.m63.eu":0.7,
 "x.bidswitch.net":0.9,
 "bid.g.doubleclick.net":0.6,
@@ -82,7 +83,7 @@ class AmazingApi(appie.AppieRestObject):
                     if host in classifier:
                         d[referer][host]["danger_index"]=classifier[host]
                     else:
-                        d[referer][host]["danger_index"]= random.random()
+                        d[referer][host]["danger_index"]= random.random()/5
             else:
                 d[referer] = {}
                 d[referer][host] = {}
