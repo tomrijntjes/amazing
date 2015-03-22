@@ -14,6 +14,8 @@
         var emitter;
         var emitter2;
         
+        var sprites = [];
+        
        	// JSON
        	var text = '{"getRequests":[' +
     '{"src":"John", "dst":"www.marktplaats.nl", "label":"OK", "count":"1" },' +
@@ -52,16 +54,26 @@
         	game.add.image(0, 0, 'background');
         	
         	// maak sprites
-        	marktplaats = game.add.sprite(game.world.centerX, game.world.centerY, 'marktplaats');
+        	
+        	//sprite = game.add.sprite(game.world.centerX, game.world.centerY, 'marktplaats')
+        	
+        	for (var i = 0; i < Object.keys(obj.getRequests).length; i++) {
+        		var sprite = game.add.sprite(game.world.centerX, game.world.centerY, 'marktplaats')
+        		game.physics.enable([ sprite ], Phaser.Physics.ARCADE);
+        		sprite.body.gravity.y = 100-(i*4);
+        		sprite.body.bounce.y = 0.5; 
+    			sprites.push(sprite);
+    			sprite.body.collideWorldBounds = true;
+    		}
+    			
+    		console.log(sprites);        	
         	
         	// enable de physics op de sprites        
-        	game.physics.enable( [ marktplaats ], Phaser.Physics.ARCADE);        
-    		
-    		// apply gravity per sprite
-        	marktplaats.body.gravity.y = 100;
-        	marktplaats.body.bounce.y = 0.5;
-        	marktplaats.body.collideWorldBounds = true;
-        	
+        	/*game.physics.enable(sprites, Phaser.Physics.ARCADE); 
+        	sprite.body.gravity.y = 100;
+        	sprite.body.bounce.y = 0.5; 
+        	sprite.body.collideWorldBounds = true;      
+        	*/
         	// Good or Bad = Up or Down
         	var up = -100;
         	var down = 100;
@@ -99,7 +111,9 @@
     		game.physics.arcade.collide(emitter);
     		game.physics.arcade.collide(emitter2);
     		
-    		game.physics.arcade.collide(marktplaats, emitter);
+    		game.physics.arcade.collide(emitter);
+    		
+    		game.physics.arcade.collide(sprites);
 	
 		}
         
