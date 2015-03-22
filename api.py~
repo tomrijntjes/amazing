@@ -82,7 +82,7 @@ class AmazingApi(appie.AppieRestObject):
                     if host in classifier:
                         d[referer][host]["danger_index"]=classifier[host]
                     else:
-                        d[referer][host]["danger_index"]= random.random()/5
+                        d[referer][host]["danger_index"]= random.random()
             else:
                 d[referer] = {}
                 d[referer][host] = {}
